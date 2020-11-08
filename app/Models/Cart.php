@@ -11,9 +11,6 @@ class Cart extends Model
         'stock_id', 'user_id',
     ];
 
-
-
-
     public function showCart()
     {
         $user_id = Auth::id();
@@ -21,10 +18,11 @@ class Cart extends Model
         $data['count'] = 0;
         $data['sum'] = 0;
         
-        foreach($data['my_carts'] as $my_cart){
+        foreach ($data['my_carts'] as $my_cart) {
             $data['count']++;
             $data['sum'] += $my_cart->stock->fee;
         }
+
         return $data;
     }
 
@@ -40,7 +38,10 @@ class Cart extends Model
     public function addCart($stock_id)
     {
         $user_id = Auth::id(); 
-        $cart_add_info = Cart::firstOrCreate(['stock_id' => $stock_id, 'user_id' => $user_id]);
+        $cart_add_info = Cart::firstOrCreate([
+            'stock_id' => $stock_id,
+            'user_id' => $user_id
+        ]);
 
         if($cart_add_info->wasRecentlyCreated){
             $message = 'カートに追加しました';
@@ -59,9 +60,9 @@ class Cart extends Model
         $user_id = Auth::id(); 
         $delete = $this->where('user_id', $user_id)->where('stock_id',$stock_id)->delete();
         
-        if($delete > 0){
+        if ($delete > 0) {
             $message = 'カートから一つの商品を削除しました';
-        }else{
+        } else {
             $message = '削除に失敗しました';
         }
         return $message;
@@ -71,9 +72,9 @@ class Cart extends Model
     public function checkoutCart()
     {
         $user_id = Auth::id(); 
-        $checkout_items=$this->where('user_id', $user_id)->get();
+        $checkout_items = $this->where('user_id', $user_id)->get();
         $this->where('user_id', $user_id)->delete();
- 
+        
         return $checkout_items;     
     }
 }
