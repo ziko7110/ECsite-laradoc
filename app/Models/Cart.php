@@ -40,7 +40,7 @@ class Cart extends Model
         $user_id = Auth::id(); 
         $cart_add_info = Cart::firstOrCreate([
             'stock_id' => $stock_id,
-            'user_id' => $user_id
+            'user_id'  => $user_id
         ]);
 
         if($cart_add_info->wasRecentlyCreated){
